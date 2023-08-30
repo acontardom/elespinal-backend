@@ -152,12 +152,8 @@ router.get('/proration/:month/:year', async (ctx, next) => {
     try {
         const monthSelected = parseInt(ctx.params.month);
         const yearSelected = parseInt(ctx.params.year);
-
         const initMonth = new Date(yearSelected, monthSelected - 1, 1);
         const endMonth = new Date(yearSelected, monthSelected, 0);
-
-        console.log(monthSelected);
-        console.log(yearSelected);
 
         const asignations = await ctx.orm.PAsignation.findAll({
             where: {

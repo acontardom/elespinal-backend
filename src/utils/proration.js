@@ -19,8 +19,6 @@ function proration(asignations, month, year) {
         const newInitDate = new Date(newAsignation.init_date);
         const newFinishDate = new Date(newAsignation.finish_date);
 
-        console.log("NEWINITI: ", newInitDate);
-
         // Si la fecha de inicio es anterior al mes seleccionado, ajustarla al primer día del mes
         if (newInitDate < initMonth) {
             newAsignation.init_date = initMonth.toISOString().split('T')[0]; // Formato YYYY-MM-DD
@@ -29,7 +27,6 @@ function proration(asignations, month, year) {
         // Si la fecha de termino es posterior al mes seleccionado, ajustarla al último día del mes
         if (newFinishDate > endMonth) {
             newAsignation.finish_date = endMonth.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-            console.log("end month", endMonth);
         }
 
         // Agregar la asignación procesada al resultado
