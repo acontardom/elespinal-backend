@@ -5,9 +5,17 @@ const cors = require('@koa/cors');
 const router = require('./routes');
 const orm = require('./models');
 const dotenv = require('dotenv');
+const http =require('http');
+
 
 
 const PORT = process.env.PORT || 8000;
+
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello World!\n');
+  });
 
 const app = new Koa();
 
