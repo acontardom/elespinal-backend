@@ -1,6 +1,9 @@
 const Router = require('koa-router');
 
+const { Op } = require('sequelize');
 const router = new Router();
+
+const prorationService = require('../utils/proration');
 
 
 // Agregamos las rutas de las asignaciones
@@ -142,6 +145,47 @@ router.delete('/:id', async (ctx) => {
         ctx.throw(500, error);
     }
 });
+
+
+// GET /proration/:month/:year`
+router.get('/proration/:month/:year', async (ctx, next) => {
+    try {
+        const monthSelected = parseInt(ctx.params.month);
+        const yearSelected = parseInt(ctx.params.year);
+
+        const initMonth = new Date(yearSelected, monthSelected - 1, 1);
+        const endMonth = new Date(yearSelected, monthSelected, 0);
+
+        console.log(monthSelected);
+        console.log(yearSelected);
+
+        const asignations = await ctx.orm.PAsignation.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        init_date: {
+                            [Op.between]: [initMonth, endMonth],
+                        },
+                    },
+                    {
+                        finish_date: {
+                            [Op.between]: [initMonth, endMonth],
+                        },
+                    },
+                ],
+            },
+        });
+        
+        // Calcular prorrateo
+        const proration_month = prorationService.proration(asignations, monthSelected, yearSelected);
+        
+        ctx.body = JSON.stringify(proration_month);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+}
+
+)
 
 
 
