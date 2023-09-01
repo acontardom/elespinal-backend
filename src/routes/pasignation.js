@@ -159,6 +159,20 @@ router.get('/proration/:month/:year', async (ctx, next) => {
             where: {
                 [Op.or]: [
                     {
+                        [Op.and]: [
+                            {
+                                init_date: {
+                                    [Op.lte]: initMonth,
+                                },
+                            },
+                            {
+                                finish_date: {
+                                    [Op.gte]: endMonth,
+                                },
+                            },
+                        ],
+                    },
+                    {
                         init_date: {
                             [Op.between]: [initMonth, endMonth],
                         },
